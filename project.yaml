@@ -1,11 +1,11 @@
-specVersion: 0.0.1
+specVersion: 0.2.0
 description: ''
 repository: ''
-schema: ./schema.graphql
+schema: 
+  file: ./schema.graphql
 network:
-  
   endpoint: wss://moonbeam-api.ap-southeast-1.bwarelabs.com/ws/61ad1002-e17f-476c-896b-fbf3bda489d8
-  
+  genesisHash: '0xfe58ea77779b7abda7da4ec526d14db9b1e9cd40a217c34892af80a9b332b76d'
   types:
       AccountId: EthereumAccountId
       Address: AccountId
@@ -147,6 +147,7 @@ dataSources:
     kind: substrate/Runtime
     startBlock: 1  # 7560558   7560585 7560724
     mapping:
+      file: ./dist/index.js
       handlers:
         - handler: handleBlock
           kind: substrate/BlockHandler
