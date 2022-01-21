@@ -36,10 +36,7 @@ export async function handleBlock(block: SubstrateBlock): Promise<void> {
       const eventType = `${section}/${method}`;
       logger.info(
         `
-        Block: ${blockNumber}, Event ${eventType} :
-        -------------
-          ${JSON.stringify(event.toJSON(), null, 1)}  
-        =============
+        Block: ${blockNumber}, Event ${eventType}
         `
       );
 
@@ -142,7 +139,7 @@ async function getAccountInfoAtBlockNumber(
   accountId: string,
   blockNumber: bigint
 ): Promise<AccountInfoAtBlock> {
-  logger.info(`getAccountInfo at ${blockNumber} by addres:${accountId}`);
+  // logger.info(`getAccountInfo at ${blockNumber} by addres:${accountId}`);
   const raw: AccountInfo = (await api.query.system.account(
     accountId
   )) as unknown as AccountInfo;
@@ -165,9 +162,9 @@ async function getAccountInfoAtBlockNumber(
       snapshotAtBlock: blockNumber,
     };
   }
-  logger.info(
-    `getAccountInfo at ${blockNumber} : ${accountInfo.accountId}--${accountInfo.freeBalance}--${accountInfo.reserveBalance}--${accountInfo.totalBalance}`
-  );
+  // logger.info(
+  //   `getAccountInfo at ${blockNumber} : ${accountInfo.accountId}--${accountInfo.freeBalance}--${accountInfo.reserveBalance}--${accountInfo.totalBalance}`
+  // );
   return accountInfo;
 }
 
@@ -201,7 +198,7 @@ async function handleEndowed(
   const [accountId, balanceChange] = event.data.toJSON() as [string, bigint];
   let blockNum = bn.toBigInt();
 
-  logger.info(`New Endowed happened!: ${JSON.stringify(event)}`);
+  // logger.info(`New Endowed happened!: ${JSON.stringify(event)}`);
 
   let newEndowed = await Endowed.create({
     id: accountId,
@@ -228,7 +225,7 @@ async function handleDustLost(
   const [accountId, totalBalanceBeforeDestroy] = event.data.toJSON() as [string, bigint];
   let blockNum = bn.toBigInt();
 
-  logger.info(`New DustLost happened!: ${JSON.stringify(event)}`);
+  // logger.info(`New DustLost happened!: ${JSON.stringify(event)}`);
 
   let newDustLost = await DustLost.create({
     id: accountId,
@@ -257,7 +254,7 @@ export const handleTransfer = async (
   ];
   let blockNum = bn.toBigInt();
 
-  logger.info(`New Transfer happened!: ${JSON.stringify(event)}`);
+  // logger.info(`New Transfer happened!: ${JSON.stringify(event)}`);
 
   // Create the new transfer entity
   let aId = await getID();
@@ -289,7 +286,7 @@ export const handleBalanceSet = async (
   ];
   let blockNum = bn.toBigInt();
 
-  logger.info(`BalanceSet happened!: ${JSON.stringify(event)}`);
+  // logger.info(`BalanceSet happened!: ${JSON.stringify(event)}`);
 
   // Create the new BalanceSet entity
   let aId = await getID();
@@ -315,7 +312,7 @@ export const handleDeposit = async (
   const [accountToSet, balance] = event.data.toJSON() as [string, bigint];
   let blockNum = bn.toBigInt();
 
-  logger.info(`Deposit happened!: ${JSON.stringify(event)}`);
+  // logger.info(`Deposit happened!: ${JSON.stringify(event)}`);
 
   // Create the new Deposit entity
   let aId = await getID();
@@ -341,7 +338,7 @@ export const handleReserved = async (
   const [accountToSet, balance] = event.data.toJSON() as [string, bigint];
   let blockNum = bn.toBigInt();
 
-  logger.info(`Reserved happened!: ${JSON.stringify(event)}`);
+  // logger.info(`Reserved happened!: ${JSON.stringify(event)}`);
 
   // Create the new Reserved entity
   let aId = await getID();
@@ -368,7 +365,7 @@ export const handleUnreserved = async (
   const [accountToSet, balance] = event.data.toJSON() as [string, bigint];
   let blockNum = bn.toBigInt();
 
-  logger.info(`Unreserved happened!: ${JSON.stringify(event)}`);
+  // logger.info(`Unreserved happened!: ${JSON.stringify(event)}`);
 
   // Create the new Reserved entity
   let aId = await getID();
@@ -395,7 +392,7 @@ export const handleWithdraw = async (
   const [accountToSet, balance] = event.data.toJSON() as [string, bigint];
   let blockNum = bn.toBigInt();
 
-  logger.info(`Withdraw happened!: ${JSON.stringify(event)}`);
+  // logger.info(`Withdraw happened!: ${JSON.stringify(event)}`);
 
   // Create the new Withdraw entity
   let aId = await getID();
@@ -425,7 +422,7 @@ export const handleSlash = async (
   const [accountToSet, balance] = event.data.toJSON() as [string, bigint];
   let blockNum = bn.toBigInt();
 
-  logger.info(`Slash happened!: ${JSON.stringify(event)}`);
+  // logger.info(`Slash happened!: ${JSON.stringify(event)}`);
 
   // Create the new Withdraw entity
   let aId = await getID();
@@ -464,7 +461,7 @@ export const handleReservRepatriated = async (
   ];
   let blockNum = bn.toBigInt();
 
-  logger.info(`Repatraiated happened!: ${JSON.stringify(event)}`);
+  // logger.info(`Repatraiated happened!: ${JSON.stringify(event)}`);
 
   //ensure that our account entities exist
 
