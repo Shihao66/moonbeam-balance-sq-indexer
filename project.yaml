@@ -4,7 +4,7 @@ repository: ''
 schema: 
   file: ./schema.graphql
 network:
-  endpoint: wss://moonbeam-api.ap-southeast-1.bwarelabs.com/ws/61ad1002-e17f-476c-896b-fbf3bda489d8
+  endpoint: wss://moonbeam.api.onfinality.io/public-ws
   genesisHash: '0xfe58ea77779b7abda7da4ec526d14db9b1e9cd40a217c34892af80a9b332b76d'
   types:
       AccountId: EthereumAccountId
@@ -149,10 +149,10 @@ dataSources:
     mapping:
       file: ./dist/index.js
       handlers:
-        - handler: handleBlock
-          kind: substrate/BlockHandler
-        # - handler: handleEvent
-        #   kind: substrate/EventHandler
+        # - handler: handleBlock
+        #   kind: substrate/BlockHandler
+        - handler: handleEvent
+          kind: substrate/EventHandler
       #handlers:
       #  - handler: handleTransfer
       #    kind: substrate/EventHandler

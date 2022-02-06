@@ -12,7 +12,7 @@ import { AccountInfo, EventRecord } from "@polkadot/types/interfaces/system";
 import { Account, AccountSnapshot, Endowed } from "../types";
 import { DustLost } from "../types/models/DustLost";
 
-const enableTakeAccountSnapshot: boolean = false;
+const enableTakeAccountSnapshot: boolean = true;
 
 class AccountInfoAtBlock {
   accountId: string;
@@ -168,7 +168,77 @@ async function getAccountInfoAtBlockNumber(
   return accountInfo;
 }
 
-export async function handleEvent(event: SubstrateEvent): Promise<void> {}
+export async function handleEvent(event: SubstrateEvent): Promise<void> {
+  let block = event.block;
+  let blockNumber = block.block.header.number.toBigInt();
+
+  // let events = block.events;
+  let accounts4snapshot: string[] = [];
+  // for (let i = 0; i < events.length; i++) {
+    // let event = events[i];
+    const {
+      event: { method, section, index },
+    } = event;
+
+    if (section === "balances") {
+      const eventType = `${section}/${method}`;
+      logger.info(
+        `
+        Block: ${blockNumber}, Event ${eventType}
+        `
+      );
+
+      let accounts: string[] = [];
+      switch (method) {
+        case "Endowed":
+          accounts = await handleEndowed(block, event);
+          break;
+        case "DustLost":
+          accounts = await handleDustLost(block, event);
+          break;
+        case "Transfer":
+          accounts = await handleTransfer(block, event);
+          break;
+        case "BalanceSet":
+          accounts = await handleBalanceSet(block, event);
+          break;
+        case "Deposit":
+          accounts = await handleDeposit(block, event);
+          break;
+        case "Reserved":
+          accounts = await handleReserved(block, event);
+          break;
+        case "Withdraw":
+          accounts = await handleWithdraw(block, event);
+          break;
+        case "Unreserved":
+          accounts = await handleUnreserved(block, event);
+          break;
+        case "Slashed":
+          accounts = await handleSlash(block, event);
+          break;
+        case "ReserveRepatriated":
+          accounts = await handleReservRepatriated(block, event);
+          break;
+        default:
+          break;
+      }
+
+      for (const a of accounts) {
+        if (accounts4snapshot.length > 0 && accounts4snapshot.indexOf(a) > -1) {
+          continue;
+        }
+        accounts4snapshot.push(a);
+      }
+    }
+  // }
+
+  if (enableTakeAccountSnapshot === true) {
+    if (accounts4snapshot && accounts4snapshot.length > 0) {
+      await takeAccountSnapshot(blockNumber, accounts4snapshot);
+    }
+  }
+}
 
 const generaterID = "GENERATOR";
 
